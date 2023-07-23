@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\NftRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +16,22 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(
     collectionOperations:['post','get'],
     itemOperations:['put', 'delete', 'get']
+)]
+#[ApiFilter(
+    SearchFilter::class, properties:[
+        'titre' => 'partial',
+        'valeur'=> 'partial',
+        'cheminStockage'=> 'partial',
+        'createur'=>'partial',
+        'dateDrop'=> 'partial',
+        'types'=> 'partial',
+
+    ]
+)]
+#[ApiFilter(
+    DateFilter::class, properties:[
+        'dateDrop'
+    ]
 )]
 class Nft
 {
