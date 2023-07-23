@@ -1,0 +1,12 @@
+App\Entity\User:
+  user{0..100}:
+    email: '<email()>'
+    roles: '[]'
+    password: '<password()>'
+    prenom: '<firstname()>'
+    nom: '<lastname()>'
+    username: '<username()>'
+    adresse: '@adresse*'
+    dateNaissance: '<dateTimeBetween( "now-100 years", "now-18 years")>'
+    transaction: '@transaction*'
+    createdAt: '<dateTimeBetween( "dateNaissance+18 years"", "now")>'

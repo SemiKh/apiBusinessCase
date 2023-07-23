@@ -1,0 +1,5 @@
+App\Entity\Commune:
+  commune{0..70}:
+    codePostal: '<numberBetween(0,99)> <numberBetween(0,999)>'
+    departement: '<numberBetween(0,99)>'
+    ville: '<city()>'

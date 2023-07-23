@@ -1,0 +1,5 @@
+App\Entity\Type:
+  type{0..15}:
+    theme: '<word()>'
+    extension: 'fileExtension()'
+    bibliothequeNft: '<word()>'

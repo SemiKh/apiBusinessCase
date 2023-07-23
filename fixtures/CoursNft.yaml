@@ -1,0 +1,4 @@
+App\Entity\CoursNft:
+  coursNft{0..200}:
+    coursNft24h: '<randomFloat(2)>'
+    dateNft : '<dateTimeBetween("2020-01-01", "now")>'

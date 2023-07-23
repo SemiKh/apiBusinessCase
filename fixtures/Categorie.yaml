@@ -1,0 +1,3 @@
+App\Entity\Categorie:
+  Categories{0..25}:
+    nomCategorie: '<word()>'

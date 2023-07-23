@@ -10,7 +10,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations:['post','get'],
+    itemOperations:['put', 'delete', 'get']
+)]
 class Nft
 {
     #[ORM\Id]

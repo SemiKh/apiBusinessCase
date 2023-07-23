@@ -32,3 +32,11 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/adresses, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/communes, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/transactions, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/nfts, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
+
+
+

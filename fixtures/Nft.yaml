@@ -1,0 +1,14 @@
+App\Entity\Nft:
+  nft{0..200}:
+     titre: '<words(3, true)>'
+     jeton: '<uniqid()>'
+     valeur: '<randomFloat(2)>'
+     nombreDisponible: '<numberBetween(1,50)>'
+     createur: '<username()>'
+     dateDrop: '<dateTimeBetween("2020-01-01", "now")>'
+     SousCategories: '@sousCategorie*'
+     cheminStockage: '<url()>'
+     types: '@type*'
+     transactions: '1x @transaction*'
+     user: '@user*'
+

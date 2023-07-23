@@ -10,7 +10,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    itemOperations:['get'],
+    collectionOperations:['get','post']
+)]
 class Transaction
 {
     #[ORM\Id]

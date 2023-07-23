@@ -1,0 +1,4 @@
+App\Entity\SousCategorie:
+  sousCategorie{0..12}:
+    nomSousCategorie: '<word()>'
+    categorie: '@Categories*'

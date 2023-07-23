@@ -1,0 +1,6 @@
+App\Entity\Adresse:
+  adresse{0..300}:
+    ligne1: '<streetName()>'
+    ligne2: '<secondaryAddress()>'
+    ligne3: '<city()>'
+    commune: '@commune*'

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,6 +18,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ApiResource(
     collectionOperations:['get','post'],
     itemOperations:['put', 'delete', 'get']
+)]
+#[ApiFilter(
+    DateFilter::class, properties:[
+        'createdAt'
+    ]
+)]
+#[ApiFilter(
+    SearchFilter::class, properties:[
+        'username'=> 'partial',
+        'createdAt'=>'partial',
+        'country.name'=> 'partial',
+        'country.nationality'=> 'partial',
+    ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
