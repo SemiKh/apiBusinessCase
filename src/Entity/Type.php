@@ -9,6 +9,7 @@ use App\Repository\TypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 #[ApiResource(
@@ -23,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
 
     ]
 )]
-class Type
+class Type implements SlugInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,9 +32,11 @@ class Type
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?string $theme = null;
 
     #[ORM\Column(length: 5)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?string $extension = null;
 
     #[ORM\Column(length: 255)]
@@ -41,6 +44,10 @@ class Type
 
     #[ORM\OneToMany(mappedBy: 'types', targetEntity: Nft::class)]
     private Collection $nfts;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -116,5 +123,21 @@ class Type
         }
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getNom(): ?string {
+        return $this->theme;
     }
 }

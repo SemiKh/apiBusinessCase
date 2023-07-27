@@ -11,14 +11,23 @@ use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CoursNftRepository::class)]
 #[ApiResource(
     collectionOperations:[
-        'get', 
+        'get'=> [
+            'normalization_context' => [ 
+                'groups' => 'courNft:list'
+            ]
+        ],
     ],
     itemOperations:[
-        'get',
+        'get' => [
+            'normalization_context' => [
+                'groups' => 'courNft:item'
+            ]
+        ]
     ]
 )]
 #[ApiFilter(
@@ -29,7 +38,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiFilter(
     SearchFilter::class, properties:[
         'dateNft'=>'partial',
-        'coursNft24h'=>'partial'
+        'coursNft24h'=>'partial',
+        'nfts.titre'=>'partial',
     ]
 )]
 class CoursNft
@@ -37,15 +47,19 @@ class CoursNft
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['courNft:item','courNft:list' ])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['courNft:item','courNft:list', 'nft:post', 'nft:list', 'nft:item' ])]
     private ?float $coursNft24h = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['courNft:item','courNft:list', 'nft:post', 'nft:list', 'nft:item' ])]
     private ?\DateTimeInterface $dateNft = null;
 
     #[ORM\OneToMany(mappedBy: 'cours', targetEntity: Nft::class)]
+    #[Groups(['courNft:item','courNft:list' ])]
     private Collection $nfts;
 
     public function __construct()

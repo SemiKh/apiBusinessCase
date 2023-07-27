@@ -9,32 +9,52 @@ use App\Repository\SousCategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SousCategorieRepository::class)]
 #[ApiResource(
-    itemOperations:['get'],
-    collectionOperations:['get']
+    itemOperations:[
+        'get'=> [
+            'normalization_context' => [
+                'groups' => 'sousCategory:item'
+            ]
+        ]
+    ],
+    collectionOperations:[
+        'get'=> [
+            'normalization_context' => [
+                'groups' => 'sousCategory:list'
+            ]
+        ]
+    ]
 )]
 #[ApiFilter(
     SearchFilter::class, properties:[
-        'nomSousCategorie' => 'partial'
+        'nomSousCategorie' => 'partial',
+        'categorie.nomCategorie'=>'partial',
     ]
 )]
-class SousCategorie
-{
+class SousCategorie implements SlugInterface
+{ 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['sousCategory:list', 'sousCategory:item', 'nft:post', 'nft:list', 'nft:item'])]
     private ?string $nomSousCategorie = null;
 
     #[ORM\OneToMany(mappedBy: 'SousCategories', targetEntity: Nft::class)]
     private Collection $nfts;
 
-    #[ORM\ManyToOne(inversedBy: 'Categories')]
+    #[ORM\ManyToOne(inversedBy: 'categories')]
+    #[Groups(['sousCategory:list', 'sousCategory:item', 'nft:post', 'nft:list', 'nft:item'])]
     private ?Categorie $categorie = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['sousCategory:list', 'sousCategory:item', 'nft:post', 'nft:list', 'nft:item'])]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -98,5 +118,22 @@ class SousCategorie
         $this->categorie = $categorie;
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nomSousCategorie;
     }
 }

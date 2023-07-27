@@ -9,15 +9,21 @@ use App\Repository\CommuneRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommuneRepository::class)]
 #[ApiResource(
-    collectionOperations:['post'],
-    itemOperations:['put', 'delete', 'get']
+    collectionOperations:[
+        'post'
+    ],
+    itemOperations:['put', 'delete', 'get'
+    ]
 )]
 #[ApiFilter(
     SearchFilter::class, properties:[
-        'ville'=>'partial'
+        'ville'=>'partial',
+        'codePostal'=>'exact',
+        'departement'=>'partial',
     ]
 )]
 class Commune
@@ -28,12 +34,15 @@ class Commune
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?string $codePostal = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?string $departement = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?string $ville = null;
 
     #[ORM\OneToMany(mappedBy: 'commune', targetEntity: Adresse::class)]

@@ -9,7 +9,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: username
 
     firewalls:
         login:
@@ -19,7 +19,7 @@ security:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-                username_path: email
+                username_path: username
                 password_path: password
 
         api:
@@ -32,11 +32,13 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/communes, roles: IS_AUTHENTICATED_FULLY, method: [POST, PUT, DELETE] }
+        - { path: ^/api/nfts, roles: IS_AUTHENTICATED_FULLY, method: [POST, PUT, DELETE]}
+        - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY, method: [POST, PUT, DELETE] }
+        - { path: ^/api/transactions, roles: IS_AUTHENTICATED_FULLY, method: [POST] }
         - { path: ^/api/adresses, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/communes, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/transactions, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/nfts, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api, roles: PUBLIC_ACCESS }
+        
 
 
 

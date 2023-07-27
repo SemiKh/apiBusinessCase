@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 #[ApiResource(
@@ -20,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiFilter(
     SearchFilter::class, properties:[
         'dateAcquisition'=> 'partial',
+        'nft.titre'=>'partial',
     ]
 )]
 #[ApiFilter(
@@ -27,21 +29,28 @@ use Doctrine\ORM\Mapping as ORM;
         'dateAcquisition'
     ]
 )]
-class Transaction
+class Transaction implements SlugInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item','user:post', 'user:list', 'user:item'])]
     private ?\DateTimeInterface $dateAcquisition = null;
 
     #[ORM\ManyToOne(inversedBy: 'transactions')]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?Nft $nft = null;
 
     #[ORM\OneToMany(mappedBy: 'transaction', targetEntity: User::class)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item'])]
     private Collection $users;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item','user:post', 'user:list', 'user:item'])]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -105,5 +114,21 @@ class Transaction
         }
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getNom(): ?string{
+        return $this->nft->getTitre();
     }
 }

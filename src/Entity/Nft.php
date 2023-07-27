@@ -11,71 +11,110 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
 #[ApiResource(
-    collectionOperations:['post','get'],
-    itemOperations:['put', 'delete', 'get']
+    collectionOperations: [
+        'post' => [
+            'denormalization_context' => [
+                'groups' => 'nft:post'
+            ]
+        ],
+        'get' => [
+            'normalization_context' => [
+                'groups' => 'nft:list'
+            ]
+        ],
+    ],
+    itemOperations: [
+        'put',
+        'delete',
+        'get' => [
+            'normalization_context' => [
+                'groups' => 'nft:item'
+            ]
+        ],
+    ]
 )]
 #[ApiFilter(
-    SearchFilter::class, properties:[
+    SearchFilter::class, properties: [
         'titre' => 'partial',
-        'valeur'=> 'partial',
-        'cheminStockage'=> 'partial',
-        'createur'=>'partial',
-        'dateDrop'=> 'partial',
-        'types'=> 'partial',
+        'valeur' => 'partial',
+        'cheminStockage' => 'partial',
+        'createur' => 'partial',
+        'dateDrop' => 'partial',
+        'types.extension' => 'partial',
+        'types.theme' => 'partial',
+        'SousCategories.nomSousCategorie'=> 'partial',
+        'SousCategories.categorie.nomCategorie'=> 'partial'
 
     ]
 )]
 #[ApiFilter(
-    DateFilter::class, properties:[
+    DateFilter::class, properties: [
         'dateDrop'
     ]
 )]
-class Nft
+class Nft implements SlugInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['nft:post', 'nft:list', 'nft:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['courNft:item', 'courNft:list', 'user:post', 'user:list', 'user:item'])]
     private ?string $titre = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?string $jeton = null;
 
     #[ORM\Column]
+    #[Groups(['courNft:item', 'courNft:list', 'user:post', 'user:list', 'user:item'])]
     private ?float $valeur = null;
 
     #[ORM\Column]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?int $nombreDisponible = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?string $cheminStockage = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?string $createur = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?\DateTimeInterface $dateDrop = null;
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?Type $types = null;
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
+    #[Groups(['nft:post', 'nft:list', 'nft:item'])]
     private ?CoursNft $cours = null;
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
+    #[Groups(['nft:post', 'nft:list', 'nft:item'])]
     private ?SousCategorie $SousCategories = null;
 
     #[ORM\OneToMany(mappedBy: 'nft', targetEntity: Transaction::class)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private Collection $transactions;
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
+    #[Groups(['nft:post', 'nft:list', 'nft:item'])]
     private ?User $user = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -245,6 +284,22 @@ class Nft
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getNom(): ?string{
+        return $this->titre;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }

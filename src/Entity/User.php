@@ -14,32 +14,54 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 #[ApiResource(
-    collectionOperations:['get','post'],
-    itemOperations:['put', 'delete', 'get']
+    collectionOperations: [
+        'post' => [
+            'denormalization_context' => [
+                'groups' => 'user:post'
+            ]
+        ],
+        'get' => [
+            'normalization_context' => [
+                'groups' => 'user:list'
+            ]
+        ],
+    ],
+    itemOperations: [
+        'put',
+        'delete',
+        'get' => [
+            'normalization_context' => [
+                'groups' => 'user:item'
+            ]
+        ]
+    ]
 )]
 #[ApiFilter(
-    DateFilter::class, properties:[
+    DateFilter::class, properties: [
         'createdAt'
     ]
 )]
 #[ApiFilter(
-    SearchFilter::class, properties:[
-        'username'=> 'partial',
-        'createdAt'=>'partial',
+    SearchFilter::class, properties: [
+        'username' => 'partial',
+        'createdAt' => 'partial',
     ]
 )]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, SlugInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -52,28 +74,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
     private ?string $username = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?Adresse $adresse = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?Transaction $transaction = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Nft::class)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private Collection $nfts;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?\DateTimeInterface $dateNaissance = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['user:post', 'user:list', 'user:item'])]
     private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['nft:post', 'nft:list', 'nft:item', 'user:post', 'user:list', 'user:item'])]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -240,7 +274,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSalt(): ?string {
+    public function getSalt(): ?string
+    {
         return '';
     }
 
@@ -264,6 +299,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
