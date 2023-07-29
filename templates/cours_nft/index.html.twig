@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<title>CoursNft index</title>
+
+{% block body %}
+    <h1>CoursNft index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CoursNft24h</th>
+                <th>DateNft</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cours_nft in cours_nfts %}
+            <tr>
+                <td>{{ cours_nft.id }}</td>
+                <td>{{ cours_nft.coursNft24h }}</td>
+                <td>{{ cours_nft.dateNft ? cours_nft.dateNft|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_cours_nft_show', {'id': cours_nft.id}) }}">show</a>
+                    <a href="{{ path('app_cours_nft_edit', {'id': cours_nft.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cours_nft_new') }}">Create new</a>
+{% endblock %}

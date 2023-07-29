@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<title>New CoursNft</title>
+
+{% block body %}
+    <h1>Create new CoursNft</h1>
+
+    {{ include('cours_nft/_form.html.twig') }}
+
+    <a href="{{ path('app_cours_nft_index') }}">back to list</a>
+{% endblock %}

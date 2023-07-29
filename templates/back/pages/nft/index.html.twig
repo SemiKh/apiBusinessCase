@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<title>Nft index</title>
+
+{% block body %}
+    <h1>Nft index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Jeton</th>
+                <th>Valeur</th>
+                <th>NombreDisponible</th>
+                <th>CheminStockage</th>
+                <th>Createur</th>
+                <th>DateDrop</th>
+                <th>Slug</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for nft in nfts %}
+            <tr>
+                <td>{{ nft.id }}</td>
+                <td>{{ nft.titre }}</td>
+                <td>{{ nft.jeton }}</td>
+                <td>{{ nft.valeur }}</td>
+                <td>{{ nft.nombreDisponible }}</td>
+                <td>{{ nft.cheminStockage }}</td>
+                <td>{{ nft.createur }}</td>
+                <td>{{ nft.dateDrop ? nft.dateDrop|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ nft.slug }}</td>
+                <td>
+                    <a href="{{ path('app_admin_nft_show', {'id': nft.id}) }}">show</a>
+                    <a href="{{ path('app_admin_nft_edit', {'id': nft.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_nft_new') }}">Create new</a>
+{% endblock %}

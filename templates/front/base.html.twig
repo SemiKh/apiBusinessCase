@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="shortcut icon" type="image/png" href="{{ asset('/build/images/favicon.png') }}"/>
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+
+        {% block leogout_seo %}
+        {% endblock leogout_seo %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('front_scripts') }}
+        {% endblock %}
+
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('front_styles') }}
+        {% endblock %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}">
+
+        {% block header %}
+        {% endblock %}
+
+        <div class="container">
+            {% block body %}
+            {% endblock %}
+        </div>
+
+        {% block footer %}
+        {% endblock %}
+    </body>
+</html>

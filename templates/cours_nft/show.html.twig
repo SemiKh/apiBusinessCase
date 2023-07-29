@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<title>CoursNft</title>
+
+{% block body %}
+    <h1>CoursNft</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cours_nft.id }}</td>
+            </tr>
+            <tr>
+                <th>CoursNft24h</th>
+                <td>{{ cours_nft.coursNft24h }}</td>
+            </tr>
+            <tr>
+                <th>DateNft</th>
+                <td>{{ cours_nft.dateNft ? cours_nft.dateNft|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cours_nft_index') }}">back to list</a>
+
+    <a href="{{ path('app_cours_nft_edit', {'id': cours_nft.id}) }}">edit</a>
+
+    {{ include('cours_nft/_delete_form.html.twig') }}
+{% endblock %}

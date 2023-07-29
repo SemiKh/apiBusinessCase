@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<title>Nft</title>
+
+{% block body %}
+    <h1>Nft</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ nft.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ nft.titre }}</td>
+            </tr>
+            <tr>
+                <th>Jeton</th>
+                <td>{{ nft.jeton }}</td>
+            </tr>
+            <tr>
+                <th>Valeur</th>
+                <td>{{ nft.valeur }}</td>
+            </tr>
+            <tr>
+                <th>NombreDisponible</th>
+                <td>{{ nft.nombreDisponible }}</td>
+            </tr>
+            <tr>
+                <th>CheminStockage</th>
+                <td>{{ nft.cheminStockage }}</td>
+            </tr>
+            <tr>
+                <th>Createur</th>
+                <td>{{ nft.createur }}</td>
+            </tr>
+            <tr>
+                <th>DateDrop</th>
+                <td>{{ nft.dateDrop ? nft.dateDrop|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ nft.slug }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_nft_index') }}">back to list</a>
+
+    <a href="{{ path('app_admin_nft_edit', {'id': nft.id}) }}">edit</a>
+
+    {{ include('nft/_delete_form.html.twig') }}
+{% endblock %}
