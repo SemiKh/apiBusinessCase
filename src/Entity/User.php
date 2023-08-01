@@ -305,7 +305,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SlugInt
 
     public function getSlug(): ?string
     {
-        return $this->slug;
+        return $this->username;
     }
 
     public function setSlug(string $slug): static

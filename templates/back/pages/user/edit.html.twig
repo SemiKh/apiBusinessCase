@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+{% extends 'back/base.html.twig' %}
 
-<title>Edit User</title>
+
 
 {% block body %}
+<title>Edit User</title>
     <h1>Edit User</h1>
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('back/pages/user/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_admin_user_index') }}">back to list</a>
 
-    {{ include('user/_delete_form.html.twig') }}
+    {{ include('back/pages/user/_delete_form.html.twig') }}
 {% endblock %}

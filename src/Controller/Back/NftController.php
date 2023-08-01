@@ -5,19 +5,26 @@ namespace App\Controller\Back;
 use App\Entity\Nft;
 use App\Form\NftType;
 use App\Repository\NftRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/nft', name: 'app_admin_nft_')]
+#[Route('/admin/nft', name: 'app_admin_nft_')]
 class NftController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(NftRepository $nftRepository): Response
+    public function index(NftRepository $nftRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $nfts = $paginator->paginate(
+            $nftRepository->findAll(),
+            $request->query->getInt('page', 1),
+            8
+        );
+
         return $this->render('back/pages/nft/index.html.twig', [
-            'nfts' => $nftRepository->findAll(),
+            'nfts' => $nfts,
         ]);
     }
 

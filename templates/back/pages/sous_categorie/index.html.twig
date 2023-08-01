@@ -1,16 +1,19 @@
-<!DOCTYPE html>
-
-<title>SousCategorie index</title>
+{% extends 'back/base.html.twig' %}
 
 {% block body %}
-    <h1>SousCategorie index</h1>
+    <h1>Sous-Categorie index</h1>
 
-    <table class="table">
+    <table class="table table-dark table-striped table-hover">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>NomSousCategorie</th>
-                <th>Slug</th>
+                <th>{{ knp_pagination_sortable(
+                    sous_categories,
+                    'Id',
+                    'id')|raw }}Id</th>
+                <th>{{ knp_pagination_sortable(
+                    sous_categories,
+                    'Sous-Categorie',
+                    'nomSousCategorie')|raw }}</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,10 +22,9 @@
             <tr>
                 <td>{{ sous_categorie.id }}</td>
                 <td>{{ sous_categorie.nomSousCategorie }}</td>
-                <td>{{ sous_categorie.slug }}</td>
                 <td>
-                    <a href="{{ path('app_admin_sous_categorie_show', {'id': sous_categorie.id}) }}">show</a>
-                    <a href="{{ path('app_admin_sous_categorie_edit', {'id': sous_categorie.id}) }}">edit</a>
+                    <a href="{{ path('app_admin_sous_categorie_show', {'id': sous_categorie.id}) }}"><i class="fa-light fa-eye" style="color: #f0d50f;"></i></a>
+                    <a href="{{ path('app_admin_sous_categorie_edit', {'id': sous_categorie.id}) }}"><i class="fa-light fa-pen-to-square" style="color: #f0d50f;"></i></a>
                 </td>
             </tr>
         {% else %}
@@ -32,6 +34,8 @@
         {% endfor %}
         </tbody>
     </table>
-
+    <div class="navigation d-flex justify-content-center mt-2">
+		{{ knp_pagination_render(sous_categories) }}
+	</div>
     <a href="{{ path('app_admin_sous_categorie_new') }}">Create new</a>
 {% endblock %}

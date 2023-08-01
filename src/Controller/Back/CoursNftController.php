@@ -5,19 +5,26 @@ namespace App\Controller\Back;
 use App\Entity\CoursNft;
 use App\Form\CoursNftType;
 use App\Repository\CoursNftRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/cours/nft', name: 'app_admin_cours_nft_')]
+#[Route('/admin/cours_nft', name: 'app_admin_cours_nft_')]
 class CoursNftController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(CoursNftRepository $coursNftRepository): Response
+    public function index(CoursNftRepository $coursNftRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $cours_nfts = $paginator->paginate(
+            $coursNftRepository->findAll(),
+            $request->query->getInt('page', 1),
+            8
+        );
+
         return $this->render('back/pages/cours_nft/index.html.twig', [
-            'cours_nfts' => $coursNftRepository->findAll(),
+            'cours_nfts' => $cours_nfts,
         ]);
     }
 

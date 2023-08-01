@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+{% extends 'back/base.html.twig' %}
 
-<title>CoursNft</title>
 
 {% block body %}
     <h1>CoursNft</h1>
 
-    <table class="table">
+    <table class="table table-dark table-striped table-hover">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -22,9 +21,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_cours_nft_index') }}">back to list</a>
+    <a href="{{ path('app_admin_cours_nft_index') }}">back to list</a>
 
-    <a href="{{ path('app_cours_nft_edit', {'id': cours_nft.id}) }}">edit</a>
+    <a href="{{ path('app_admin_cours_nft_edit', {'id': cours_nft.id}) }}">edit</a>
 
-    {{ include('cours_nft/_delete_form.html.twig') }}
+    {{ include('back/pages/cours_nft/_delete_form.html.twig') }}
 {% endblock %}

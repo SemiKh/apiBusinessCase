@@ -6,18 +6,27 @@ use App\Entity\Categorie;
 use App\Form\CategorieType;
 use App\Repository\CategorieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/categorie', name: 'app_admin_categorie_')]
+#[Route('/admin/categorie', name: 'app_admin_categorie_')]
 class CategorieController extends AbstractController
 {
+
+
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(CategorieRepository $categorieRepository): Response
+    public function index(CategorieRepository $categorieRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $categories = $paginator->paginate(
+            $categorieRepository->findAll(),
+            $request->query->getInt('page', 1),
+            8
+        );
+
         return $this->render('back/pages/categorie/index.html.twig', [
-            'categories' => $categorieRepository->findAll(),
+            'categories' => $categories,
         ]);
     }
 

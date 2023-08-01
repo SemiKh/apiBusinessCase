@@ -2,13 +2,12 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <link rel="shortcut icon" type="image/png" href="{{ asset('/build/images/favicon.png') }}"/>
+        <link rel="shortcut icon" type="image/png" href="{{ asset('img/logo.png') }}"/>
         <title>
             {% block title %}
                 Administration
             {% endblock %}
         </title>
-    
         {% block javascripts %}
             {{ encore_entry_script_tags('back_scripts') }}
         {% endblock %}
@@ -16,17 +15,17 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('back_styles') }}
         {% endblock %}
+
     </head>
     
      <body>
-     {% extends 'back/base.html.twig' %}
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12 admin-menu">
                 {% block menu %}
                     {% include 'back/common/menu.html.twig' %}
                 {% endblock %}
             </div>
-            <div class="col-lg-9 col-md-9 col-sm-12 container-fluid pe-4">
+            <div class="col-lg-9 col-md-9 col-sm-12 container-fluid pe-4 back">
                 {% block body %}
                 {% endblock %}
             </div>

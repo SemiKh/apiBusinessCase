@@ -1,13 +1,12 @@
-<!DOCTYPE html>
+{% extends 'back/base.html.twig' %}
 
-<title>Edit CoursNft</title>
 
 {% block body %}
     <h1>Edit CoursNft</h1>
 
-    {{ include('cours_nft/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('back/pages/cours_nft/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_cours_nft_index') }}">back to list</a>
+    <a href="{{ path('app_admin_cours_nft_index') }}">back to list</a>
 
-    {{ include('cours_nft/_delete_form.html.twig') }}
+    {{ include('back/pages/cours_nft/_delete_form.html.twig') }}
 {% endblock %}
